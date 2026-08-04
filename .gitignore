@@ -1,0 +1,15 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+data/raw/*.csv
+data/processed/*.csv
+data/*.db
+data/*.log
+data/*.jsonl
+data/consumer_state.json
+data/stream_order_ids.txt
+data/*.npz
+
+.DS_Store

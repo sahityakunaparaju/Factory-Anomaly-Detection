@@ -1,0 +1,9 @@
+{
+  "model_name": "lof",
+  "model_file": "lof.joblib",
+  "threshold": 1.2846882357244527,
+  "price_scale": 19.273799925870005,
+  "contamination": 0.065,
+  "f1": 0.7488412514484357,
+  "trained_at": "2026-08-03T14:33:40.070252+00:00"
+}
