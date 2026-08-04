@@ -24,14 +24,13 @@ independently of the live stream.
 ### Dashboard Preview
 
 <p align="center">
-  <img src="assets/dashboard.png" width="90%">
+  <img src="assets/home.png" width="800" alt="Dashboard home view">
 </p>
 
-### Analytics
+<br>
 
 <p align="center">
-  <img src="assets/charts.png" width="48%">
-  <img src="assets/anomalies.png" width="48%">
+  <img src="assets/charts.png" width="800" alt="Analytics charts">
 </p>
 
 ## Features
@@ -49,24 +48,24 @@ independently of the live stream.
 ```mermaid
 flowchart LR
     subgraph OFFLINE["Offline training (one-time)"]
-        RAW[data/raw/DataCoSupplyChainDataset.csv<br/>(download from Kaggle)]
+        RAW[data/raw/DataCoSupplyChainDataset.csv<br/>download from Kaggle]
         FEAT[src/features.py<br/>feature engineering]
-        INJ[src/inject_anomalies.py<br/>synthetic anomaly injection<br/>price / delivery / inventory]
+        INJ[src/inject_anomalies.py<br/>synthetic anomaly injection<br/>price, delivery, inventory]
         PROC[data/processed/dataset_with_anomalies.csv]
-        TRAIN[src/train.py<br/>LOF + IsolationForest<br/>MAD-price scaling · model selection]
-        MODELS[models/<br/>lof.joblib · scaler bundle · current_model.json]
+        TRAIN[src/train.py<br/>LOF and IsolationForest<br/>MAD-price scaling, model selection]
+        MODELS[models/<br/>lof.joblib, scaler bundle, current_model.json]
         RAW --> FEAT --> INJ --> PROC --> TRAIN --> MODELS
     end
 
     subgraph LIVE["Live streaming"]
-        PROD[src/producer.py<br/>replays processed CSV,<br/>raw order fields only]
+        PROD[src/producer.py<br/>replays processed CSV<br/>raw order fields only]
         KAFKA[(Redpanda / Kafka<br/>topic: factory-orders)]
-        CONSUMER[src/consumer.py<br/>LiveFeatureState: running per-group state<br/>→ live features → scale → LOF score]
+        CONSUMER[src/consumer.py<br/>LiveFeatureState: running per-group state<br/>live features, scale, LOF score]
         DB[(SQLite<br/>data/anomalies.db)]
         DASH[Streamlit dashboard<br/>dashboard/app.py]
         PROD --> KAFKA --> CONSUMER --> DB --> DASH
-        MODELS -.model · scaler · threshold.-> CONSUMER
-        CONSUMER -.consumer_state.json / features.jsonl.-> DASH
+        MODELS -.model, scaler, threshold.-> CONSUMER
+        CONSUMER -.consumer_state, features log.-> DASH
     end
 ```
 
